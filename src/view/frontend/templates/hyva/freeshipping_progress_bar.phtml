@@ -1,0 +1,32 @@
+<?php
+use Hyva\Theme\Model\ViewModelRegistry;
+use OM\FreeShippingProgressBar\ViewModel\Cart;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+/** @var Cart $viewModel */
+
+$viewModel = $viewModels->require(Cart::class);
+?>
+<div x-data="initFreeShippingProgressBar()" x-init="$nextTick(() => $dispatch('reload-customer-section-data'))" @private-content-loaded.window="getData($event.detail.data)">
+    <div>
+        <p x-show="!threshold()">
+            Noch <span class="text-rose-600 font-bold" x-text="getDifference()"></span> für eine <span class="font-bold">versandkostenfreie Lieferung</span> innerhalb Deutschlands.
+        </p>
+
+        <p x-show="threshold()">
+            Ihr Versand (<span x-text="country"></span>) ist kostenlos!
+        </p>
+
+        <div class="flex" x-show="!threshold()">
+            <span class="shrink-0"><span>0 €</span></span>
+            <div class="shrink w-full flex items-center ">
+                <div class="bg-black/10 overflow-hidden rounded mx-2 w-full">
+                    <div class="bg-[#00b052] h-2 block animate-fspg" :style="`width: ${getPercentComplete()}`"></div>
+                </div>
+            </div>
+            <span class="shrink-0" x-text="getMinTotal()"></span>
+        </div>
+    </div>
+</div>

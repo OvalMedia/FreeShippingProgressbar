@@ -1,0 +1,17 @@
+<!-- ko if: canShowBlock() -->
+<div class="freeship-progress">
+    <p class="upsell">
+        Noch <span class="freeship-price" data-bind="html: getDifferenceFormatted()"></span> für eine <span class="freeship-bold">versandkostenfreie Lieferung</span> innerhalb Deutschlands. **
+    </p>
+
+    <div class="freeship-progress-bar-wrapper">
+        <span class="min"><span class="price">0 €</span></span>
+        <div class="freeship-progress-bar">
+            <div class="freeship-progress-bar-bg">
+                <div class="freeship-progress-bar-fill freeship-progress-bar-progress" data-bind="style: {width: getPercentComplete()}"></div>
+            </div>
+        </div>
+        <span class="max" data-bind="html: getFreeShippingMinValueFormatted()"></span>
+    </div>
+</div>
+<!-- /ko -->

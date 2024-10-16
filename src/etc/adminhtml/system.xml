@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="ovalmedia" translate="label" sortOrder="10">
+            <label>Oval Media</label>
+        </tab>
+        <section id="om_freeshipping_progress_bar" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Free Shipping Progress Bar</label>
+            <tab>ovalmedia</tab>
+            <resource>OM_FreeShippingProgressBar::general_config</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Allgemein</label>
+                <field id="enable" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Modul aktivieren</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="min_total" sortOrder="20" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" type="text">
+                    <label>Minimum Order Total</label>
+                </field>
+
+                <field id="customer_groups" type="multiselect" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Customer Groups</label>
+                    <source_model>OM\FreeShippingProgressBar\Model\Source\CustomerGroups</source_model>
+                    <can_be_empty>1</can_be_empty>
+                    <comment><![CDATA[Leave empty for all customer groups]]></comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

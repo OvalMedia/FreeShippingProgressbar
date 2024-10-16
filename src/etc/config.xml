@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <om_freeshipping_progress_bar>
+            <enable>1</enable>
+            <min_total>0</min_total>
+        </om_freeshipping_progress_bar>
+    </default>
+</config>

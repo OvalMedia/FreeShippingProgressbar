@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="cart-drawer.totals.before">
+            <block name="cart-drawer.freeshipping.progress.bar"
+                   before="-"
+                   template="OM_FreeShippingProgressBar::hyva/freeshipping_progress_bar.phtml"
+                   ifconfig="om_freeshipping_progress_bar/general/enable" />
+        </referenceContainer>
+
+        <referenceContainer name="before.body.end">
+            <block name="freeshipping.progress.bar.component"
+                   template="OM_FreeShippingProgressBar::hyva/component.phtml"
+                   ifconfig="om_freeshipping_progress_bar/general/enable" />
+        </referenceContainer>
+    </body>
+</page>

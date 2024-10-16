@@ -1,0 +1,16 @@
+<div class="freeshipping-progress-bar" data-bind="scope:'freeshipping-progress-bar'">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+</div>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Magento_Ui/js/core/app": {
+            "components": {
+                "freeshipping-progress-bar": {
+                    "component": "OM_FreeShippingProgressBar/js/freeshipping-progress-bar"
+                }
+            }
+        }
+    }
+}
+</script>

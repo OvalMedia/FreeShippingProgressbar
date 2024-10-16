@@ -1,0 +1,49 @@
+<?php
+use Hyva\Theme\Model\ViewModelRegistry;
+use OM\FreeShippingProgressBar\ViewModel\Cart;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+/** @var Cart $viewModel */
+
+$viewModel = $viewModels->require(Cart::class);
+?>
+<script>
+    function initFreeShippingProgressBar() {
+        return {
+            difference: 0,
+            min_total: 0,
+            percent_complete: 0,
+
+            getData(data) {
+                if (data.cart.freeshipping_progress_bar) {
+                    let fpb = data.cart.freeshipping_progress_bar;
+                    this.difference = fpb.difference;
+                    this.min_total = fpb.min_total;
+                    this.percent_complete = fpb.percent_complete;
+                }
+            },
+
+            getDifference() {
+                return hyva.formatPrice(this.difference);
+            },
+
+            getMinTotal() {
+                return hyva.formatPrice(this.min_total);
+            },
+
+            getPercentComplete() {
+                return this.percent_complete + '%';
+            },
+
+            threshold() {
+                return (this.difference <= 0);
+            },
+
+            country() {
+                return '<?= $viewModel->getShippingOriginCountryId() ?>';
+            }
+        }
+    }
+</script>
