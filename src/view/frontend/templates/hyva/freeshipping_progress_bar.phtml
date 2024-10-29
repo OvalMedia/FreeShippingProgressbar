@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 use Hyva\Theme\Model\ViewModelRegistry;
 use OM\FreeShippingProgressBar\ViewModel\Cart;
 use Magento\Framework\Escaper;
@@ -9,6 +11,7 @@ use Magento\Framework\Escaper;
 
 $viewModel = $viewModels->require(Cart::class);
 ?>
+<?php if ($viewModel->canShowBlock()): ?>
 <div x-data="initFreeShippingProgressBar()" x-init="$nextTick(() => $dispatch('reload-customer-section-data'))" @private-content-loaded.window="getData($event.detail.data)">
     <div>
         <p x-show="!threshold()">
@@ -30,3 +33,4 @@ $viewModel = $viewModels->require(Cart::class);
         </div>
     </div>
 </div>
+<?php endif ?>
