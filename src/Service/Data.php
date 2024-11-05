@@ -1,6 +1,10 @@
 <?php
 declare(strict_types=1);
+
 namespace OM\FreeShippingProgressBar\Service;
+
+use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Customer\Model\Session as CustomerSession;
 
 class Data
 {
@@ -28,8 +32,8 @@ class Data
      */
     public function __construct(
         Config $config,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Customer\Model\Session $customerSession
+        CheckoutSession $checkoutSession,
+        CustomerSession $customerSession
     ) {
         $this->_config = $config;
         $this->_checkoutSession = $checkoutSession;
@@ -81,11 +85,13 @@ class Data
     }
 
     /**
-     * @return bool|float
+     * @return float
      */
-    public function getFreeShippingDifference()
+    public function getFreeShippingDifference(): float
     {
-        return $this->_config->getMinTotal() - $this->getTotal();
+        file_put_contents('fpb.txt', 'minTotal: ' . $this->getMinTotal() . "\n", FILE_APPEND);
+        file_put_contents('fpb.txt', 'total: ' . $this->getTotal() . "\n", FILE_APPEND);
+        return $this->getMinTotal() - $this->getTotal();
     }
 
     /**
@@ -93,13 +99,21 @@ class Data
      */
     public function getFreeShippingCompletionPercent(): float
     {
-        return (float) ($this->getTotal() / $this->_config->getMinTotal()) * 100;
+        return (float) ($this->getTotal() / $this->getMinTotal()) * 100;
     }
 
     /**
      * @return string|null
      */
-    public function getShippingCountry(): ?string
+    public function getDefaultShippingCountry(): ?string
+    {
+        return $this->_config->getShippingOriginCountryId();
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCurrentShippingCountry(): ?string
     {
         $id = null;
 
@@ -118,11 +132,33 @@ class Data
         $id = null;
 
         if ($quote = $this->getQuote()) {
-            $id = $quote->getCustomerGroupId();
+            $id = (int) $quote->getCustomerGroupId();
         }
 
         return $id;
     }
+
+    /**
+     * @return float
+     */
+    public function getMinTotal(): ?float
+    {
+        $result = 0;
+        $countryId = $this->getCurrentShippingCountry();
+
+        if (!$countryId) {
+            $countryId = $this->getDefaultShippingCountry();
+        }
+
+        $totals = $this->_config->getMinTotals();
+
+        if (isset($totals[$countryId])) {
+            $result = $totals[$countryId];
+        }
+
+        return (float) $result;
+    }
+
 
     /**
      * @return bool
@@ -132,12 +168,12 @@ class Data
         $result = false;
 
         if ($this->_config->isEnabled()) {
-            $result = $this->getTotal() >= $this->_config->getMinTotal();
-            $country = $this->getShippingCountry();
+            $result = $this->getTotal() >= $this->getMinTotal();
+            $country = $this->getDefaultShippingCountry();
 
             if ($country == $this->_config->getShippingOriginCountryId() || $country == null) {
                 try {
-                    $groups = $this->_config->getCustomerGroups();
+                    $groups = $this->_config->getAllowedCustomerGroupIds();
 
                     if (empty($groups)) {
                         $result = true;
@@ -148,7 +184,6 @@ class Data
                 } catch (\Exception $e) {
                 }
             }
-
         }
 
         return $result;

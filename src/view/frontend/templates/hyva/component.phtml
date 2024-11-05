@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 use Hyva\Theme\Model\ViewModelRegistry;
 use OM\FreeShippingProgressBar\ViewModel\Cart;
 use Magento\Framework\Escaper;
@@ -8,13 +9,57 @@ use Magento\Framework\Escaper;
 /** @var Cart $viewModel */
 
 $viewModel = $viewModels->require(Cart::class);
+$allowedCountries = $viewModel->getAllowedCountries();
+if (!empty($allowedCountries)) {
+    $allowedCountries = "['" . implode("','", $allowedCountries) . "']";
+} else {
+    $allowedCountries = '[]';
+}
+
+$allowedCustomerGroupIds = $viewModel->getAllowedCustomerGroupIds();
+if (!empty($allowedCustomerGroupIds)) {
+    $allowedCustomerGroupIds = "[" . implode(",", $allowedCustomerGroupIds) . "]";
+} else {
+    $allowedCustomerGroupIds = '[]';
+}
+
+$minTotals = $viewModel->getMinTotals();
+if (!empty($minTotals)) {
+    $minTotals = "[" . implode(",", $minTotals) . "]";
+} else {
+    $minTotals = '[]';
+}
 ?>
+<?php //if ($viewModel->canShowBlock()): ?>
 <script>
     function initFreeShippingProgressBar() {
         return {
+            visible: false,
             difference: 0,
             min_total: 0,
+            minTotals: <?= $minTotals ?>,
             percent_complete: 0,
+            currentShippingCountry: '',
+            defaultShippingCountry: '',
+            customerGroupId: 0,
+            allowedCustomerGroupIds: <?= $allowedCustomerGroupIds ?>,
+            allowedCountries: <?= $allowedCountries ?>,
+
+            isVisible() {
+                if (this.allowedCustomerGroupIds.includes(this.customerGroupId)) {
+                    this.visible = true;
+                }
+                /*
+                if (
+                    (
+                        this.currentShippingCountry === null ||
+                        this.allowedCountries.includes(this.currentShippingCountry)
+                    ) &&
+                    this.allowedCustomerGroupIds.includes(this.customerGroupId)
+                ) {
+                    this.visible = true;
+                }*/
+            },
 
             getData(data) {
                 if (data.cart.freeshipping_progress_bar) {
@@ -22,7 +67,17 @@ $viewModel = $viewModels->require(Cart::class);
                     this.difference = fpb.difference;
                     this.min_total = fpb.min_total;
                     this.percent_complete = fpb.percent_complete;
+                    this.currentShippingCountry = fpb.current_shipping_country;
+                    this.defaultShippingCountry = fpb.default_shipping_country;
+                    this.customerGroupId = fpb.customer_group_id;
                 }
+
+                console.log('currentShippingCountry: ' + this.currentShippingCountry);
+                this.isVisible();
+            },
+
+            getShippingCountry() {
+                return this.currentShippingCountry || this.defaultShippingCountry;
             },
 
             getDifference() {
@@ -39,11 +94,8 @@ $viewModel = $viewModels->require(Cart::class);
 
             threshold() {
                 return (this.difference <= 0);
-            },
-
-            country() {
-                return '<?= $viewModel->getShippingOriginCountryId() ?>';
             }
         }
     }
 </script>
+<?php //endif ?>

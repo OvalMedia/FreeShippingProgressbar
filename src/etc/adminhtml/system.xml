@@ -20,7 +20,14 @@
                     <label>Minimum Order Total</label>
                 </field>
 
-                <field id="customer_groups" type="multiselect" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="min_total_by_country" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Minimum Order Total By Country</label>
+                    <frontend_model>OM\FreeShippingProgressBar\Block\Adminhtml\MinTotalByCountryField</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                    <comment><![CDATA[<p></p>]]></comment>
+                </field>
+
+                <field id="customer_groups" type="multiselect" translate="label" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Customer Groups</label>
                     <source_model>OM\FreeShippingProgressBar\Model\Source\CustomerGroups</source_model>
                     <can_be_empty>1</can_be_empty>

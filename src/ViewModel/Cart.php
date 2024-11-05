@@ -57,11 +57,35 @@ class Cart implements \Magento\Framework\View\Element\Block\ArgumentInterface
     }
 
     /**
+     * @return array
+     */
+    public function getMinTotals(): array
+    {
+        return $this->_config->getMinTotals();
+    }
+
+    /**
      * @return int|null
      */
     public function getCustomerGroupId(): ?int
     {
         return $this->_data->getCustomerGroupId();
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getAllowedCountries(): ?array
+    {
+        return $this->_config->getAllowedCountries();
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getAllowedCustomerGroupIds(): ?array
+    {
+        return $this->_config->getAllowedCustomerGroupIds();
     }
 
     /**

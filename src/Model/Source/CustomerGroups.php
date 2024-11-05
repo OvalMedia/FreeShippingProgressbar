@@ -2,25 +2,29 @@
 declare(strict_types=1);
 namespace OM\FreeShippingProgressBar\Model\Source;
 
-class CustomerGroups implements \Magento\Framework\Data\OptionSourceInterface
+use Magento\Framework\Data\OptionSourceInterface;
+use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+
+class CustomerGroups implements OptionSourceInterface
 {
     /**
      * @var \Magento\Customer\Api\GroupRepositoryInterface
      */
-    protected \Magento\Customer\Api\GroupRepositoryInterface $_groupRepository;
+    protected GroupRepositoryInterface $_groupRepository;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
-    protected \Magento\Framework\Api\SearchCriteriaBuilder $_searchCriteriaBuilder;
+    protected SearchCriteriaBuilder $_searchCriteriaBuilder;
 
     /**
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
-        \Magento\Customer\Api\GroupRepositoryInterface $groupRepository,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+        GroupRepositoryInterface $groupRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->_groupRepository = $groupRepository;
         $this->_searchCriteriaBuilder = $searchCriteriaBuilder;
