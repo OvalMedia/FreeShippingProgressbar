@@ -89,8 +89,6 @@ class Data
      */
     public function getFreeShippingDifference(): float
     {
-        file_put_contents('fpb.txt', 'minTotal: ' . $this->getMinTotal() . "\n", FILE_APPEND);
-        file_put_contents('fpb.txt', 'total: ' . $this->getTotal() . "\n", FILE_APPEND);
         return $this->getMinTotal() - $this->getTotal();
     }
 
